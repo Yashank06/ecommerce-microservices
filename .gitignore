@@ -1,0 +1,17 @@
+# Ignore sensitive files 
+application.yml 
+application.properties 
+*.env 
+# Ignore IDE files 
+.idea/ 
+*.iml 
+# Ignore build files 
+target/ 
+bin/ 
+out/ 
+# Ignore logs 
+*.log 
+logs/ 
+# Ignore Docker files 
+Dockerfile 
+docker-compose.yml 
