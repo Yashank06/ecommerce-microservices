@@ -3,10 +3,10 @@ package com.mycompany.ecommerce_microservices.usermanagementservice.models;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 @Data
 @Entity
@@ -25,10 +25,16 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column
+    private String role;
+
     // Implement UserDetails methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Add roles/authorities if needed
+        if (role == null || role.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override

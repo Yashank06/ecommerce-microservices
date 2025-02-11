@@ -7,7 +7,10 @@ import com.mycompany.ecommerce_microservices.usermanagementservice.services.User
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,5 +38,13 @@ public class UserController {
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.loginUser(loginRequest);
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update user role")
+    @PutMapping("/{username}/role")
+    public ResponseEntity<User> updateRole(@PathVariable String username, @RequestBody Map<String, String> roleMap) {
+        User updatedUser = userService.updateRole(username, roleMap.get("role"));
+        return ResponseEntity.ok(updatedUser);
     }
 }

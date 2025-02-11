@@ -38,6 +38,7 @@ public class UserService {
             throw new DuplicateEmailException("Email already exists: " + user.getEmail());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         logger.info("User registered successfully: {}", user.getUsername());
         return userRepository.save(user);
     }
@@ -63,5 +64,13 @@ public class UserService {
         String token = jwtUtil.generateToken(userDetails);
         logger.info("User logged in successfully: {}", userDetails.getUsername());
         return new LoginResponse(token);
+    }
+
+    public User updateRole(String username, String role) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+
+        user.setRole(role);
+        return userRepository.save(user);
     }
 }
